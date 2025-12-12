@@ -311,5 +311,11 @@
     "chat_placeholder": "Pergunte à Inteligência Sem Fronteiras...",
     "chat_intro_message": "Olá! Eu sou o assistente da Inteligência Sem Fronteiras. Como posso ajudá-lo a entender este projeto?",
     "chat_unlock_prompt": "Desbloqueie a Inteligência Sem Fronteiras para fazer as suas perguntas sobre este projeto.",
-    "chat_unlock_button": "Desbloquear Chat"
+    "chat_unlock_button": "Desbloquear Chat",
+    "transparency_nav_impact": "Impacto do projeto",
+    "project_impact_title": "Visão geral do impacto do projeto",
+    "project_impact_subtitle": "Veja como nosso trabalho cria mudanças positivas em comunidades ao redor do mundo.",
+    "project_impact_chart_label": "Gráfico de barras mostrando o número de beneficiários por tipo de projeto",
+    "project_impact_note": "Os dados representam beneficiários acumulados de todos os projetos ativos no último ano fiscal.",
+    "beneficiaries": "Beneficiários"
 }

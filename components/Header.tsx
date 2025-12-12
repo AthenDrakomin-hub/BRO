@@ -202,6 +202,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, onDonateClick 
     return children.some(child => child.page === currentPage);
   };
 
+  // Add touch event handlers for mobile devices
+  const handleTouchMove = (e: React.TouchEvent) => {
+    // Prevent default behavior to avoid unwanted scrolling
+    if (isMobileMenuOpen) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <>
     <header className={`bg-white shadow-md sticky top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
@@ -277,9 +285,17 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, onDonateClick 
     
       {/* Mobile Menu Panel */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40" onClick={() => setIsMobileMenuOpen(false)}>
+        <div 
+          className="md:hidden fixed inset-0 z-40" 
+          onClick={() => setIsMobileMenuOpen(false)}
+          onTouchMove={handleTouchMove} // Add touch move handler
+        >
             <div className="absolute inset-0 bg-black/50" aria-hidden="true"></div>
-            <div className="relative bg-white w-4/5 max-w-xs h-full p-4" onClick={e => e.stopPropagation()}>
+            <div 
+              className="relative bg-white w-4/5 max-w-xs h-full p-4" 
+              onClick={e => e.stopPropagation()}
+              onTouchMove={handleTouchMove} // Add touch move handler
+            >
                 <nav className="flex flex-col space-y-2 pt-4">
                     {navItems.map(item => {
                         if ('children' in item) {

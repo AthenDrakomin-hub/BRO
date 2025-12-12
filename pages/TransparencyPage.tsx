@@ -5,8 +5,9 @@ import FundingAllocation from '../components/transparency/FundingAllocation';
 import AuditCertification from '../components/transparency/AuditCertification';
 import DataApi from '../components/transparency/DataApi';
 import DonationHistory from '../components/transparency/DonationHistory';
+import ProjectImpactChart from '../components/transparency/ProjectImpactChart';
 
-type TransparencySection = 'reports' | 'funding' | 'audits' | 'api' | 'donations';
+type TransparencySection = 'reports' | 'funding' | 'audits' | 'api' | 'donations' | 'impact';
 
 const TransparencyPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState<TransparencySection>('reports');
@@ -24,6 +25,8 @@ const TransparencyPage: React.FC = () => {
         return <DataApi />;
       case 'donations':
         return <DonationHistory />;
+      case 'impact':
+        return <ProjectImpactChart />;
       default:
         return <AnnualReports />;
     }
@@ -58,6 +61,7 @@ const TransparencyPage: React.FC = () => {
           <NavLink section="audits" label={t('transparency_nav_audits')} />
           <NavLink section="api" label={t('transparency_nav_api')} />
           <NavLink section="donations" label={t('transparency_nav_donations')} />
+          <NavLink section="impact" label={t('transparency_nav_impact')} />
         </nav>
       </div>
 

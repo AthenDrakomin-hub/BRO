@@ -3,7 +3,7 @@ import type { Project, ChatMessage } from '../types';
 import ProgressBar from './ui/ProgressBar';
 import DonationForm from './DonationForm';
 import { GoogleGenAI, Chat } from '@google/genai';
-import { LoaderIcon, PaperPlaneIcon, LockClosedIcon, TwitterIcon, FacebookIcon, LinkedInIcon } from './ui/Icons';
+import { LoaderIcon, PaperPlaneIcon, LockClosedIcon, TwitterIcon, FacebookIcon, LinkedInIcon, MicrophoneIcon } from './ui/Icons';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface ProjectDetailProps {
@@ -17,9 +17,11 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
   const [userInput, setUserInput] = useState('');
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [isChatUnlocked, setIsChatUnlocked] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const { language, t } = useLanguage();
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const donationFormRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   const projectTranslation = project.translations[language] || project.translations.en;
   const percentage = Math.round((project.raised / project.goal) * 100);
@@ -58,6 +60,31 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
     }
   }, [messages, isChatLoading]);
 
+  useEffect(() => {
+    // Initialize speech recognition
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = language === 'zh' || language === 'zh-TW' ? 'zh-CN' : language || 'en-US';
+
+      recognition.onresult = (event: any) => {
+        const transcript = Array.from(event.results)
+          .map((result: any) => result[0])
+          .map((result) => result.transcript)
+          .join('');
+        setUserInput(transcript);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, [language]);
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userInput.trim() || !chat || isChatLoading) return;
@@ -84,7 +111,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
     setIsChatUnlocked(true);
   };
 
-  const handleShare = (platform: 'twitter' | 'facebook' | 'linkedin') => {
+  const handleShare = (platform: 'twitter' | 'facebook' | 'linkedin' | 'whatsapp') => {
     const url = window.location.href;
     const text = `Support "${projectTranslation.title}" with Aide Sans Frontières! See how you can help:`;
     const encodedUrl = encodeURIComponent(url);
@@ -101,6 +128,9 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
       case 'linkedin':
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
         break;
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodedText}%20${encodedUrl}`;
+        break;
     }
 
     if (shareUrl) {
@@ -108,9 +138,28 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
     }
   };
 
+  const toggleSpeechRecognition = () => {
+    if (!recognitionRef.current) return;
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
+
+  // Add touch event handlers for mobile devices
+  const handleTouchStart = (e: React.TouchEvent) => {
+    // Prevent default behavior to avoid scrolling while interacting with buttons
+    if (e.target instanceof HTMLElement && e.target.tagName === 'BUTTON') {
+      e.preventDefault();
+    }
+  };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto" onTouchStart={handleTouchStart}>
       <div className="bg-white rounded-lg shadow-xl overflow-hidden">
         <img className="w-full h-64 md:h-80 object-cover" src={project.imageUrl} alt={projectTranslation.title} loading="lazy" />
         <div className="p-6 md:p-8">
@@ -136,6 +185,9 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
                 </button>
                 <button onClick={() => handleShare('linkedin')} className="text-gray-500 hover:text-blue-700 transition-colors" aria-label="Share on LinkedIn">
                     <LinkedInIcon className="w-8 h-8" />
+                </button>
+                <button onClick={() => handleShare('whatsapp')} className="text-gray-500 hover:text-green-600 transition-colors" aria-label="Share on WhatsApp">
+                    <span className="w-8 h-8 flex items-center justify-center text-2xl">💬</span>
                 </button>
             </div>
           </div>
@@ -173,16 +225,35 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onBack }) => {
             </div>
             {isChatUnlocked ? (
               <form onSubmit={handleSendMessage} className="mt-4 flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-                  placeholder={t('chat_placeholder')}
-                  disabled={isChatLoading || !chat}
-                  className="w-full p-2.5 rounded-md border-gray-300 focus:ring-red-500 focus:border-red-500 disabled:bg-gray-100 transition"
-                  aria-label="Chat input"
-                />
-                <button type="submit" disabled={isChatLoading || !chat || !userInput.trim()} className="bg-red-600 text-white p-3 rounded-full hover:bg-red-700 disabled:bg-red-300 transition-all duration-200 transform hover:scale-110 active:scale-100 disabled:scale-100 flex-shrink-0">
+                <div className="relative w-full">
+                  <input
+                    type="text"
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    placeholder={t('chat_placeholder')}
+                    disabled={isChatLoading || !chat}
+                    className="w-full p-2.5 pr-12 rounded-md border-gray-300 focus:ring-red-500 focus:border-red-500 disabled:bg-gray-100 transition"
+                    aria-label="Chat input"
+                  />
+                  <button
+                    type="button"
+                    onClick={toggleSpeechRecognition}
+                    className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${isListening ? 'text-red-600' : 'text-gray-400'} hover:text-red-700`}
+                    aria-label={isListening ? "Stop voice input" : "Start voice input"}
+                    onTouchEnd={toggleSpeechRecognition} // Add touch event for mobile
+                  >
+                    <MicrophoneIcon className={`w-5 h-5 ${isListening ? 'animate-pulse' : ''}`} />
+                  </button>
+                </div>
+                <button 
+                  type="submit" 
+                  disabled={isChatLoading || !chat || !userInput.trim()} 
+                  className="bg-red-600 text-white p-3 rounded-full hover:bg-red-700 disabled:bg-red-300 transition-all duration-200 transform hover:scale-105 active:scale-100 disabled:scale-100 flex-shrink-0"
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    handleSendMessage(e as any);
+                  }} // Add touch event for mobile
+                >
                   <PaperPlaneIcon className="w-5 h-5" />
                 </button>
               </form>

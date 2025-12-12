@@ -310,5 +310,11 @@
     "chat_placeholder": "Fragen Sie Grenzenlose Intelligenz...",
     "chat_intro_message": "Hallo! Ich bin der Assistent für Grenzenlose Intelligenz. Wie kann ich Ihnen helfen, dieses Projekt zu verstehen?",
     "chat_unlock_prompt": "Schalten Sie Grenzenlose Intelligenz frei, um Ihre Fragen zu diesem Projekt zu stellen.",
-    "chat_unlock_button": "Chat freischalten"
+    "chat_unlock_button": "Chat freischalten",
+    "transparency_nav_impact": "Projekt Auswirkung",
+    "project_impact_title": "Projekt Auswirkung Übersicht",
+    "project_impact_subtitle": "Sehen Sie, wie unsere Arbeit positive Veränderungen in Gemeinden weltweit bewirkt.",
+    "project_impact_chart_label": "Balkendiagramm der Anzahl der Begünstigten nach Projekttyp",
+    "project_impact_note": "Daten stellen kumulierte Begünstigte aller aktiven Projekte im letzten Geschäftsjahr dar.",
+    "beneficiaries": "Begünstigte"
 }

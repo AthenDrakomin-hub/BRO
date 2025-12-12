@@ -315,5 +315,11 @@
     "chat_placeholder": "詢問“智能無邊界”...",
     "chat_intro_message": "您好！我是“智能無邊界”助手。我能如何幫助您了解本專案？",
     "chat_unlock_prompt": "解鎖「智能無邊界」以提出您關於本專案的問題。",
-    "chat_unlock_button": "解鎖聊天"
+    "chat_unlock_button": "解鎖聊天",
+    "transparency_nav_impact": "專案影響",
+    "project_impact_title": "專案影響概述",
+    "project_impact_subtitle": "了解我們的工作如何在世界各地的社區創造積極變化。",
+    "project_impact_chart_label": "按專案類型顯示受益人數量的條形圖",
+    "project_impact_note": "數據顯示上一財年所有活躍專案的累計受益人。",
+    "beneficiaries": "受益人"
 }

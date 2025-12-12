@@ -159,6 +159,7 @@
     "transparency_nav_audits": "Auditorías",
     "transparency_nav_api": "API de datos",
     "transparency_nav_donations": "Historial de donaciones",
+    "transparency_nav_impact": "Impacto del proyecto",
     "reports_title": "Informes anuales",
     "reports_subtitle": "Explore nuestros informes anuales para obtener una descripción detallada de nuestras actividades, estados financieros y el impacto de nuestro trabajo en todo el mundo.",
     "report_2023_title": "Informe anual y financiero de 2023",
@@ -311,5 +312,10 @@
     "chat_placeholder": "Pregúntale a Inteligencia Sin Fronteras...",
     "chat_intro_message": "¡Hola! Soy el asistente de Inteligencia Sin Fronteras. ¿Cómo puedo ayudarte a entender este proyecto?",
     "chat_unlock_prompt": "Desbloquea Inteligencia Sin Fronteras para hacer tus preguntas sobre este proyecto.",
-    "chat_unlock_button": "Desbloquear chat"
+    "chat_unlock_button": "Desbloquear chat",
+    "project_impact_title": "Resumen del impacto del proyecto",
+    "project_impact_subtitle": "Vea cómo nuestro trabajo crea un cambio positivo en comunidades de todo el mundo.",
+    "project_impact_chart_label": "Gráfico de barras que muestra el número de beneficiarios por tipo de proyecto",
+    "project_impact_note": "Los datos representan beneficiarios acumulados de todos los proyectos activos en el último año fiscal.",
+    "beneficiaries": "Beneficiarios"
 }
