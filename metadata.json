@@ -1,0 +1,5 @@
+{
+  "name": "Humanitarian Aid Dashboard",
+  "description": "An interactive web application inspired by Médecins Sans Frontières (MSF) to showcase humanitarian projects, manage donations, and engage with volunteers. It features real-time project tracking and transparent reporting.",
+  "requestFramePermissions": []
+}
